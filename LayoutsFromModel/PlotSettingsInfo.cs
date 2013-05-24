@@ -10,7 +10,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 namespace LayoutsFromModel
 {
 	/// <summary>
-	/// Description of PlotSettingsInfo.
+	/// Класс, содержащий информацию о настройках печати
 	/// </summary>
 	public class PlotSettingsInfo : IEqualityComparer<PlotSettingsInfo>
 	{

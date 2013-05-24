@@ -25,6 +25,12 @@ namespace LayoutsFromModel
 			CreateLayouts(new UserInputBordersBuilder());
 		}
 		
+		[CommandMethod("bargLFBL", CommandFlags.Modal|CommandFlags.NoPaperSpace)]
+		public void LayoutFromBlocks()
+		{
+			CreateLayouts(new BlocksBordersBuilder());
+		}
+		
 		private void CreateLayouts(IBordersCollectionBuilder bordersBuilder)
 		{
 			InitialUserInteraction initial = new InitialUserInteraction();

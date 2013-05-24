@@ -23,11 +23,13 @@ namespace LayoutsFromModel
 		
 		public void DrawBorder(DrawingBorders border)
 		{
+			// Обводим рамку прямоугольником
 			Drawable rec = CreateRectangle(border.First, border.Second);
 			this.objects.Add(rec);
 			TransientManager tm = TransientManager.CurrentTransientManager;
 			tm.AddTransient(rec, TransientDrawingMode.Highlight, 128, new IntegerCollection());
 
+			// Вписываем в рамку название будущего листа и его формат
 			Drawable txt = CreateLayoutNameMText(border.Center, border.Name, border.PSInfo.Name, border.ScaleFactor);
 			this.objects.Add(txt);
 			tm.AddTransient(txt, TransientDrawingMode.DirectShortTerm, 256, new IntegerCollection());

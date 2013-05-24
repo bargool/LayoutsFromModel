@@ -8,7 +8,7 @@ using System;
 namespace LayoutsFromModel
 {
 	/// <summary>
-	/// Description of IBorderVisitor.
+	/// Интерфейс посетителя, отрисовывающего границы чертежей
 	/// </summary>
 	public interface IBorderVisitor
 	{

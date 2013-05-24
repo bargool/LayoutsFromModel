@@ -15,7 +15,8 @@ using CP = LayoutsFromModel.Properties.CmdPrompts;
 namespace LayoutsFromModel
 {
 	/// <summary>
-	/// Description of UserInputBordersBuilder.
+	/// Класс, создающий коллекцию границ чертежей с помощью
+	/// ввода этих самых границ пользователем
 	/// </summary>
 	public class UserInputBordersBuilder : IBordersCollectionBuilder
 	{

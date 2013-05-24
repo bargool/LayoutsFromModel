@@ -10,7 +10,7 @@ using System.Linq;
 namespace LayoutsFromModel
 {
 	/// <summary>
-	/// Класс, инкапсулирующий логику работы с коллекцией PlotSettings.
+	/// Класс, инкапсулирующий логику работы с коллекцией PlotSettingsInfo.
 	/// В коллекции не допускаются PlotSettings с одинаковым размером листа
 	/// </summary>
 	public class PlotSettingsManager : ICollection<PlotSettingsInfo>
@@ -25,14 +25,6 @@ namespace LayoutsFromModel
 		
 		private PlotSettingsManager()
 		{}
-		
-		
-//		public PlotSettingsManager(IEnumerable<PlotSettingsInfo> plotSettingsInfos)
-//		{
-//			if (plotSettingsInfos == null || plotSettingsInfos.Count() == 0)
-//				throw new ArgumentNullException("plotSettingsInfos");
-//			this.plotSettingsInfos = new List<PlotSettingsInfo>(plotSettingsInfos);
-//		}
 		
 		// Формат бумаги с максимальной высотой
 		private PlotSettingsInfo maximumHeighted{

@@ -12,10 +12,15 @@ using Autodesk.AutoCAD.DatabaseServices;
 namespace LayoutsFromModel
 {
 	/// <summary>
-	/// Description of PlotSettingsInfoBuilder.
+	/// Класс служит для создания коллекции PlotSettingsInfo
 	/// </summary>
 	public static class PlotSettingsInfoBuilder
 	{
+		/// <summary>
+		/// Чтение именованных настроек печати из указанного файла
+		/// </summary>
+		/// <param name="templatePath">Путь к файлу с именованными настройками печати</param>
+		/// <returns>Коллекция PlotSettingsInfo</returns>
 		public static IEnumerable<PlotSettingsInfo> CreatePlotSettingsInfos(string templatePath)
 		{
 			using (Database db = new Database(false, true))
@@ -30,6 +35,9 @@ namespace LayoutsFromModel
 						{
 							ObjectId psId = entry.Value;
 							PlotSettings ps = tr.GetObject(psId, OpenMode.ForRead) as PlotSettings;
+							// Настройки печати для модели и настройки листов самих по себе
+							// нам не нужны
+							// только именованные настройки печати для листов
 							if (!ps.ModelType && !ps.PlotSettingsName.Contains("*"))
 							{
 								PlotSettings newPS = new PlotSettings(false);
@@ -43,6 +51,13 @@ namespace LayoutsFromModel
 			}
 		}
 		
+		/// <summary>
+		/// Создание коллекции PlotSettingsInfo из пользовательских форматов
+		/// в файле DWG to PDF.pc3
+		/// Также в коллекцию будут включены форматы, начинающиеся с "ISO_A" - это поведение 
+		/// подлежит изменению
+		/// </summary>
+		/// <returns>Коллекция PlotSettingsInfo</returns>
 		public static IEnumerable<PlotSettingsInfo> CreatePlotSettingsInfos()
 		{
 			string PLOTTER_NAME = "DWG To PDF.pc3";

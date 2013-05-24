@@ -11,7 +11,7 @@ using Bargool.Acad.Library;
 namespace LayoutsFromModel
 {
 	/// <summary>
-	/// Description of LayoutCreator.
+	/// Класс для создания листов
 	/// </summary>
 	public class LayoutCreator
 	{
@@ -53,7 +53,7 @@ namespace LayoutsFromModel
 		}
 		
 		/// <summary>
-		/// Метод удаляет неинициализированные Layout
+		/// Метод удаляет неинициализированные листы
 		/// </summary>
 		public void DeleteNoninitializedLayouts()
 		{
@@ -81,6 +81,14 @@ namespace LayoutsFromModel
 			}
 		}
 		
+		/// <summary>
+		/// Проверка корректности желаемого имени листа
+		/// Если лист с желаемым именем уже существует, к данному имени добавится "(1)"
+		/// Если и это имя уже есть - цифра в скобках будет увеличиваться, пока не будет найден
+		/// уникальный вариант
+		/// </summary>
+		/// <param name="expectedName">Желаемое имя листа</param>
+		/// <returns>Корректное имя листа</returns>
 		string CheckLayoutName(string expectedName)
 		{
 			string layoutName = expectedName;
@@ -103,6 +111,13 @@ namespace LayoutsFromModel
 			return layoutName;
 		}
 		
+		/// <summary>
+		/// Метод добавляет из объекта границ чертежа новые
+		/// именованые настройки печати в файл, если таковых там нет
+		/// </summary>
+		/// <param name="borders">Объект границ чертежа</param>
+		/// <param name="tr">Текущая транзакция</param>
+		/// <returns>Настройки печати, соответствующие границам чертежа</returns>
 		PlotSettings ImportPlotSettings(DrawingBorders borders, Transaction tr)
 		{
 			PlotSettings ps = new PlotSettings(false);

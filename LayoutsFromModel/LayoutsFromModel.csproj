@@ -83,6 +83,9 @@
     <Compile Include="..\..\Bargool.Acad.Library\Bargool.Acad.Library\View.cs">
       <Link>Extensions\View.cs</Link>
     </Compile>
+    <Compile Include="BlocksBordersBuilder.cs">
+      <DependentUpon>IBordersCollectionBuilder.cs</DependentUpon>
+    </Compile>
     <Compile Include="BorderDrawer.cs">
       <DependentUpon>IBorderVisitor.cs</DependentUpon>
     </Compile>
