@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# SharpDevelop 4.2.1.8805
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2655139F-B74F-43F7-AF81-979D81EE583A}"
+	ProjectSection(SolutionItems) = postProject
+		LayoutsFromModel.build = LayoutsFromModel.build
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutsFromModel", "LayoutsFromModel\LayoutsFromModel.csproj", "{A1C752F5-8EF6-44A6-BFAD-C3948D05C452}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1C752F5-8EF6-44A6-BFAD-C3948D05C452}.Debug|x86.Build.0 = Debug|x86
+		{A1C752F5-8EF6-44A6-BFAD-C3948D05C452}.Debug|x86.ActiveCfg = Debug|x86
+		{A1C752F5-8EF6-44A6-BFAD-C3948D05C452}.Release|x86.Build.0 = Release|x86
+		{A1C752F5-8EF6-44A6-BFAD-C3948D05C452}.Release|x86.ActiveCfg = Release|x86
+		{A1C752F5-8EF6-44A6-BFAD-C3948D05C452}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1C752F5-8EF6-44A6-BFAD-C3948D05C452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1C752F5-8EF6-44A6-BFAD-C3948D05C452}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1C752F5-8EF6-44A6-BFAD-C3948D05C452}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal

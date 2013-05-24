@@ -1,0 +1,65 @@
+﻿<Window x:Class="LayoutsFromModel.Configuration.ConfigurationDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:LayoutsFromModel.Configuration"
+        Loaded="Window_Loaded" Closing="Window_Closing"
+        WindowStartupLocation="CenterScreen" FocusManager.FocusedElement="{Binding ElementName=txtPrefix}"
+        Title="LFM конфигурация" SizeToContent="Height" Width="300">
+	<Window.Resources>
+		<Style
+			TargetType="Button">
+			<Setter
+				Property="Width"
+				Value="100" />
+			<Setter
+				Property="Height"
+				Value="23" />
+			<Setter
+				Property="Margin"
+				Value="10,10" />
+		</Style>
+		<Style TargetType="TextBox">
+			<Setter Property="Height" Value="23" />
+			<Setter Property="Margin" Value="10,10" />
+		</Style>
+		<Style TargetType="Label">
+			<Setter Property="Margin" Value="10,0" />
+		</Style>
+	</Window.Resources>
+	<DockPanel>
+		<StackPanel DockPanel.Dock="Top">
+			<Label Content="Префикс названия листа" />
+			<TextBox
+				Name="txtPrefix"
+				ToolTip="Префикс перед номером листа"/>
+			<Label Content="Суффикс после номера листа" />
+			<TextBox
+				Name="txtSuffix"
+				ToolTip="Суффикс названия листа"/>
+			<Label Content="Точность определения форматов" />
+			<TextBox
+				Name="txtPrecision"
+				ToolTip="Точность в мм уже после масштабирования, с которой определяется формат бумаги">
+				<!--<TextBox.Text>
+					<Binding Path="Left" UpdateSourceTrigger="PropertyChanged">
+						<Binding.ValidationRules>
+							<c:PrecisionValidationRule/>
+						</Binding.ValidationRules>
+					</Binding>
+				</TextBox.Text>-->
+			</TextBox>
+			<CheckBox
+				Name="chkDeleteNonInitialized"
+				Content="Удалять неинициализированные листы"
+				Margin="10,0" />
+			<CheckBox
+				Name="chkTileModeOn"
+				Content="Оставаться в модели по окончании работы"
+				Margin="10,0" />
+		</StackPanel>
+		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+			<Button Name="btnOK" Content="OK" Click="BtnOK_Click"/>
+			<Button Name="btnCancel" Content="Cancel" IsCancel="True" />
+		</StackPanel>
+	</DockPanel>
+</Window>

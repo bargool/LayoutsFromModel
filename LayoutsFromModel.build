@@ -1,0 +1,94 @@
+﻿<project name="AutoCAD .NET API LayoutsFromModel" default="build.all">
+	<property name="configuration" value="release"/>
+	<property name="failonerror.state" value="false"/>
+	<property name="acad.ver" value="2010"/>
+	<property name="platform" value="-x64"/>
+	<property name="framework" value="net-3.5"/>
+	<property name="project.name" value="LayoutsFromModel"/>
+	
+	<property name="reference.replacestring.temlate" value="C:\ObjectARX ${acad.ver}\inc${platform}" dynamic="true"/>
+	<property name="reference.findstring" value="${reference.replacestring.temlate}" readonly="true"/>
+	
+	<property name="reference.replacestring" value="${reference.replacestring.temlate}"/>
+	
+	<target name="clean" description="Очищает каталоги от следов прошлых компиляций">
+		<delete>
+			<fileset>
+				<include name="${project.name}/bin/Release/**" />
+				<include name="${project.name}/obj/**" />
+				<!--<include name="**/*.suo" />
+				<include name="**/*.user" />-->
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="project.prepare" description="Делает копию файла проекта">
+		<move file="${project.name}\${project.name}.csproj"
+		      tofile="${project.name}\${project.name}-backup.csproj"/>
+	</target>
+	
+	<target name="project.finish" description="Возвращает забекапленную копию файла проекта на место">
+		<move file="${project.name}\${project.name}-backup.csproj"
+		      tofile="${project.name}\${project.name}.csproj" overwrite="true"/>
+	</target>
+	
+	<target name="projectfile.change" description="Подготовка файла проекта к очередному компилированию под конкретный автокад">
+		<property name="reference.replacestring" value="${reference.replacestring.temlate}"/>
+		<!--<if test="${string::ends-with('${reference.replacestring}', '-')}">
+			<property name="reference.replacestring"
+			          value="${string::substring('${reference.replacestring}', 0, '${string::get-length('${reference.replacestring}')-1}')}"/>
+		</if>
+		<echo message="${test}"/>-->
+		<copy file="${project.name}\${project.name}-backup.csproj"
+		      tofile="${project.name}\${project.name}.csproj" overwrite="true">
+			<filterchain>
+				<replacestring from="${reference.findstring}" to="${reference.replacestring}"/>
+				<replacestring from="ACAD2010" to="ACAD${acad.ver}"/>
+			</filterchain>
+		</copy>
+	</target>
+	
+	<target name="build" depends="projectfile.change">
+		<property name="nant.settings.currentframework" value="${framework}"/>
+		<echo message="Building from ${reference.replacestring}"/>
+		<solution solutionfile="${project.name}.sln"
+		          configuration="Release"
+		          platform="Any CPU"
+		          failonerror="${failonerror.state}"/>
+		<call target="dll.rename"/>
+	</target>
+	
+	<target name="dll.rename">
+		<move file="${project.name}\bin\Release\${project.name}.dll"
+		      tofile="${project.name}\bin\Release\${project.name}${acad.ver}${platform}.dll"
+		      failonerror="${failonerror.state}"/>
+	</target>
+	
+	<target name="build.all" depends="project.prepare, clean">
+		<property name="acad.ver" value="2009"/>
+		<property name="platform" value="-win32"/>
+		<call target="build"/>
+		
+		<property name="platform" value="-x64"/>
+		<call target="build"/>
+		
+		<property name="acad.ver" value="2010"/>
+		<property name="platform" value="-win32"/>
+		<call target="build"/>
+		
+		<property name="platform" value="-x64"/>
+		<call target="build"/>
+		
+		<property name="acad.ver" value="2011"/>
+		<property name="platform" value=""/>
+		<call target="build"/>
+		
+		<property name="acad.ver" value="2012"/>
+		<property name="platform" value=""/>
+		<property name="${framework}" value="net-4.0"/>
+		<call target="build"/>
+		
+		<call target="project.finish"/>
+	</target>
+
+</project>
