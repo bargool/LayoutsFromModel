@@ -168,29 +168,25 @@ namespace LayoutsFromModel
 				if (vp == null)
 					throw new System.Exception("Не удалось получить вьюпорт!");
 			}
-			// Высоту и ширину вьюпорта выставляем в размер печатаемой области
-			if (layout.PlotRotation == PlotRotation.Degrees000)
+			// Высоту и ширину вьюпорта выставляем в размер выделенной области
+			if (layout.PlotRotation == PlotRotation.Degrees000 || layout.PlotRotation == PlotRotation.Degrees180)
 			{
-				vp.Height = layout.PlotPaperSize.Y - layout.PlotPaperMargins.MaxPoint.Y
-					- layout.PlotPaperMargins.MinPoint.Y;
-				vp.Width = layout.PlotPaperSize.X - layout.PlotPaperMargins.MaxPoint.X
-					- layout.PlotPaperMargins.MinPoint.X;
+				vp.Height = borders.Height / borders.ScaleFactor;
+				vp.Width = borders.Width / borders.ScaleFactor;
 				vp.CenterPoint = new Point3d(vp.Width/2 + layout.PlotOrigin.X,
 				                             vp.Height/2 + layout.PlotOrigin.Y,
 				                             0);
 			}
 			else
 			{
-				vp.Height = layout.PlotPaperSize.X - layout.PlotPaperMargins.MaxPoint.X
-					- layout.PlotPaperMargins.MinPoint.X;
-				vp.Width = layout.PlotPaperSize.Y - layout.PlotPaperMargins.MaxPoint.Y
-					- layout.PlotPaperMargins.MinPoint.Y;
+				vp.Height = borders.Width / borders.ScaleFactor;
+				vp.Width = borders.Height / borders.ScaleFactor;
 				vp.CenterPoint = new Point3d(vp.Width/2 + layout.PlotOrigin.Y,
 				                             vp.Height/2 + layout.PlotOrigin.X,
 				                             0);
 			}
 			vp.ViewTarget = new Point3d(0,0,0);
-			vp.ViewHeight = vp.Height * borders.ScaleFactor;
+			vp.ViewHeight = borders.Height;
 			vp.ViewCenter = new Point2d(borders.Center.X, borders.Center.Y);
 		}
 	}
