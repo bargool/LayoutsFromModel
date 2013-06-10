@@ -108,6 +108,7 @@ namespace LayoutsFromModel
 								if (borderRes.StringResult.Equals(CO.Cancel, StringComparison.InvariantCulture))
 								{
 									ed.WriteMessage("\nОтмена!");
+									drawer.ClearData();
 									borders.Clear();
 									return borders.ToArray();
 								}
