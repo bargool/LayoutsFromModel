@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
 
 namespace LayoutsFromModel
 {
@@ -35,7 +36,27 @@ namespace LayoutsFromModel
 			{
 				// Получаем коллекцию ObjectId вхождений блока blockname, затем сортируем
 				// "построчно"
-				var blockRefs = GetBlockReferences(blockname)
+				IEnumerable<ObjectId> blockRefIds = null;
+				BlockTable bt = (BlockTable)tr.GetObject(_wdb.BlockTableId, OpenMode.ForRead);
+				if (!bt.Has(blockname))
+					throw new ArgumentException("blockname");
+				ObjectId btrId = bt[blockname];
+				
+				Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
+				PromptSelectionResult res = ed.SelectImplied();
+				if (res.Status == PromptStatus.OK)
+				{
+					blockRefIds = res.Value
+						.GetObjectIds()
+						.Where(id => id.ObjectClass.Name == "AcDbBlockReference")
+						.Where(id => ((BlockReference)tr.GetObject(id, OpenMode.ForRead)).DynamicBlockTableRecord == btrId);
+				}
+				else
+				{
+					blockRefIds = GetBlockReferences(btrId);
+				}
+				
+				blockRefIds = blockRefIds
 					.Select(n => (BlockReference)tr.GetObject(n, OpenMode.ForRead))
 					.OrderByDescending(n => n.Position.Y)
 					.ThenBy(n => n.Position.X)
@@ -43,13 +64,13 @@ namespace LayoutsFromModel
 				
 				int borderIndex = InitialBorderIndex;
 				
-				foreach (var bref in blockRefs)
+				foreach (var brefId in blockRefIds)
 				{
 					string borderName = string.Format("{0}{1}{2}",
 					                                  Configuration.AppConfig.Instance.Prefix,
 					                                  borderIndex++,
 					                                  Configuration.AppConfig.Instance.Suffix);
-					borders.Add(CreateBorder(bref, borderName));
+					borders.Add(CreateBorder(brefId, borderName));
 				}
 				tr.Commit();
 			}
@@ -57,19 +78,17 @@ namespace LayoutsFromModel
 			return borders.ToArray();
 		}
 		
-		private List<ObjectId> GetBlockReferences(string blockname)
+		private List<ObjectId> GetBlockReferences(ObjectId blockId)
 		{
 			List<ObjectId> result = null;
 			using (Transaction tr = _wdb.TransactionManager.StartTransaction())
 			{
-				BlockTable bt = (BlockTable)tr.GetObject(_wdb.BlockTableId, OpenMode.ForRead);
-				BlockTableRecord btr = null;
-				if (bt.Has(blockname))
-					btr = (BlockTableRecord)tr.GetObject(bt[blockname], OpenMode.ForRead);
-				else
-					throw new ArgumentException("blockname");
+				BlockTableRecord btr = (BlockTableRecord)tr.GetObject(blockId, OpenMode.ForRead);
+
+				BlockTable bt = (BlockTable)tr.GetObject(_wdb.BlockTableId, OpenMode.ForRead);				
 				ObjectId modelId = ((BlockTableRecord)tr
 				                    .GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForRead)).ObjectId;
+				
 				result = btr.GetAllBlockReferenceIds(true)
 					.Select(n => (BlockReference)tr.GetObject(n, OpenMode.ForRead))
 					.Where(n => n.OwnerId == modelId)
