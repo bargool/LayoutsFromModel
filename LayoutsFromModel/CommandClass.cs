@@ -25,7 +25,7 @@ namespace LayoutsFromModel
 			CreateLayouts(new UserInputBordersBuilder());
 		}
 		
-		[CommandMethod("bargLFBL", CommandFlags.Modal|CommandFlags.NoPaperSpace)]
+		[CommandMethod("bargLFBL", CommandFlags.Modal|CommandFlags.NoPaperSpace|CommandFlags.UsePickSet)]
 		public void LayoutFromBlocks()
 		{
 			CreateLayouts(new BlocksBordersBuilder());
