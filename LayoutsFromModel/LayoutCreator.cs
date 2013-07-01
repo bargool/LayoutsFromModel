@@ -169,22 +169,11 @@ namespace LayoutsFromModel
 					throw new System.Exception("Не удалось получить вьюпорт!");
 			}
 			// Высоту и ширину вьюпорта выставляем в размер выделенной области
-			if (layout.PlotRotation == PlotRotation.Degrees000 || layout.PlotRotation == PlotRotation.Degrees180)
-			{
-				vp.Height = borders.Height / borders.ScaleFactor;
-				vp.Width = borders.Width / borders.ScaleFactor;
-				vp.CenterPoint = new Point3d(vp.Width/2 + layout.PlotOrigin.X,
-				                             vp.Height/2 + layout.PlotOrigin.Y,
-				                             0);
-			}
-			else
-			{
-				vp.Height = borders.Width / borders.ScaleFactor;
-				vp.Width = borders.Height / borders.ScaleFactor;
-				vp.CenterPoint = new Point3d(vp.Width/2 + layout.PlotOrigin.Y,
-				                             vp.Height/2 + layout.PlotOrigin.X,
-				                             0);
-			}
+			vp.Height = borders.Height / borders.ScaleFactor;
+			vp.Width = borders.Width / borders.ScaleFactor;
+			vp.CenterPoint = new Point3d(vp.Width/2 + layout.PlotOrigin.X,
+			                             vp.Height/2 + layout.PlotOrigin.Y,
+			                             0);
 			vp.ViewTarget = new Point3d(0,0,0);
 			vp.ViewHeight = borders.Height;
 			vp.ViewCenter = new Point2d(borders.Center.X, borders.Center.Y);
