@@ -177,6 +177,7 @@ namespace LayoutsFromModel
 			vp.ViewTarget = new Point3d(0,0,0);
 			vp.ViewHeight = borders.Height;
 			vp.ViewCenter = new Point2d(borders.Center.X, borders.Center.Y);
+			vp.Locked = LayoutsFromModel.Configuration.AppConfig.Instance.LockViewPorts;
 		}
 	}
 }

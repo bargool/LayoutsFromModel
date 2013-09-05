@@ -30,6 +30,7 @@ namespace LayoutsFromModel.Configuration
 		public bool TilemodeOn { get; set; }
 		
 		public string BlockName { get; set; }
+		public bool LockViewPorts { get; set; }
 		
 		public ConfigurationDialog()
 		{
@@ -39,7 +40,7 @@ namespace LayoutsFromModel.Configuration
 		public ConfigurationDialog
 			(string prefix, string suffix, Nullable<int> precision,
 			 bool delNonInitializedLayouts, double referenceDimension,
-			 bool tilemodeOn, string blockname)
+			 bool tilemodeOn, string blockname, bool lockViewPorts)
 			:this()
 		{
 			this.Prefix = prefix;
@@ -49,6 +50,7 @@ namespace LayoutsFromModel.Configuration
 			this.ReferenceDimension = referenceDimension;
 			this.TilemodeOn = tilemodeOn;
 			this.BlockName = blockname;
+			this.LockViewPorts = lockViewPorts;
 		}
 		
 		void Window_Loaded(object sender, RoutedEventArgs e)
@@ -59,6 +61,7 @@ namespace LayoutsFromModel.Configuration
 			chkDeleteNonInitialized.IsChecked = this.DelNonInitializedLayouts;
 			chkTileModeOn.IsChecked = this.TilemodeOn;
 			txtBlockName.Text = this.BlockName;
+			chkLockVP.IsChecked = this.LockViewPorts;
 		}
 		
 		void BtnOK_Click(object sender, RoutedEventArgs e)
@@ -75,6 +78,7 @@ namespace LayoutsFromModel.Configuration
 			DelNonInitializedLayouts = chkDeleteNonInitialized.IsChecked??false;
 			this.TilemodeOn = chkTileModeOn.IsChecked??false;
 			this.BlockName = txtBlockName.Text;
+			this.LockViewPorts = chkLockVP.IsChecked ?? false;
 		}
 	}
 }

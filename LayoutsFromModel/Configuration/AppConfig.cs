@@ -92,6 +92,15 @@ namespace LayoutsFromModel.Configuration
 			set { blockName = value; }
 		}
 		
+		bool lockViewPorts = false;
+		/// <summary>
+		/// Блокирование видовых экранов
+		/// </summary>
+		public bool LockViewPorts {
+			get { return lockViewPorts; }
+			set { lockViewPorts = value; }
+		}
+		
 		const string FILENAME = "lfmsettings.xml"; // Имя файла конфигурации
 		// Полный путь к файлу конфигурации
 		private static string SettingsFile
@@ -159,7 +168,8 @@ namespace LayoutsFromModel.Configuration
 			                                                  Precision,DeleteNonInitializedLayouts,
 			                                                  ReferenceDimension,
 			                                                  TilemodeOn,
-			                                                  BlockName);
+			                                                  BlockName,
+			                                                  LockViewPorts);
 			win.ShowDialog();
 			if (true == win.DialogResult)
 			{
@@ -169,6 +179,7 @@ namespace LayoutsFromModel.Configuration
 				this.DeleteNonInitializedLayouts = win.DelNonInitializedLayouts;
 				this.TilemodeOn = win.TilemodeOn;
 				this.BlockName = win.BlockName;
+				this.LockViewPorts = win.LockViewPorts;
 				Save();
 			}
 		}
