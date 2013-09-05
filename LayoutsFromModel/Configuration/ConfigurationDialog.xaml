@@ -57,7 +57,7 @@
 				Content="Оставаться в модели по окончании работы"
 				Margin="10,0" />
 			<CheckBox
-				Name="chkBlockVP"
+				Name="chkLockVP"
 				Content="Блокировать созданные видовые экраны"
 				Margin="10, 0" />
 			<Label Content="Имя блока рамки для определения чертежей" />
