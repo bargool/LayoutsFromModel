@@ -6,8 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-
+using System.Linq;
 using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.ApplicationServices;
 
 namespace LayoutsFromModel
 {
@@ -23,38 +24,52 @@ namespace LayoutsFromModel
 		/// <returns>Коллекция PlotSettingsInfo</returns>
 		public static IEnumerable<PlotSettingsInfo> CreatePlotSettingsInfos(string templatePath)
 		{
-			using (Database db = new Database(false, true))
+			Database db = null;
+			bool isTemplateOpened = false;
+			
+			DocumentCollection docMan = Application.DocumentManager;
+			Document doc = docMan.Cast<Document>().FirstOrDefault(d => d.Name.Equals(templatePath, StringComparison.InvariantCulture));
+			if (doc != null)
 			{
+				db = doc.Database;
+				isTemplateOpened = true;
+			}
+			else
+			{
+				db = new Database(false, true);
 				db.ReadDwgFile(templatePath, System.IO.FileShare.Read, true, null);
-				using (Transaction tr = db.TransactionManager.StartTransaction())
+			}
+			
+			using (Transaction tr = db.TransactionManager.StartTransaction())
+			{
+				DBDictionary psDict = tr.GetObject(db.PlotSettingsDictionaryId, OpenMode.ForRead) as DBDictionary;
+				if (psDict != null)
 				{
-					DBDictionary psDict = tr.GetObject(db.PlotSettingsDictionaryId, OpenMode.ForRead) as DBDictionary;
-					if (psDict != null)
+					foreach (DBDictionaryEntry entry in psDict)
 					{
-						foreach (DBDictionaryEntry entry in psDict)
+						ObjectId psId = entry.Value;
+						PlotSettings ps = tr.GetObject(psId, OpenMode.ForRead) as PlotSettings;
+						// Настройки печати для модели и настройки листов самих по себе
+						// нам не нужны
+						// только именованные настройки печати для листов
+						if (!ps.ModelType && !ps.PlotSettingsName.Contains("*"))
 						{
-							ObjectId psId = entry.Value;
-							PlotSettings ps = tr.GetObject(psId, OpenMode.ForRead) as PlotSettings;
-							// Настройки печати для модели и настройки листов самих по себе
-							// нам не нужны
-							// только именованные настройки печати для листов
-							if (!ps.ModelType && !ps.PlotSettingsName.Contains("*"))
-							{
-								PlotSettings newPS = new PlotSettings(false);
-								newPS.CopyFrom(ps);
-								yield return new PlotSettingsInfo(newPS);
-							}
+							PlotSettings newPS = new PlotSettings(false);
+							newPS.CopyFrom(ps);
+							yield return new PlotSettingsInfo(newPS);
 						}
 					}
-					tr.Commit();
 				}
+				tr.Commit();
 			}
+			if (!isTemplateOpened)
+				db.Dispose();
 		}
 		
 		/// <summary>
 		/// Создание коллекции PlotSettingsInfo из пользовательских форматов
 		/// в файле DWG to PDF.pc3
-		/// Также в коллекцию будут включены форматы, начинающиеся с "ISO_A" - это поведение 
+		/// Также в коллекцию будут включены форматы, начинающиеся с "ISO_A" - это поведение
 		/// подлежит изменению
 		/// </summary>
 		/// <returns>Коллекция PlotSettingsInfo</returns>
