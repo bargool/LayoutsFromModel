@@ -19,6 +19,7 @@ namespace LayoutsFromModel
 	/// </summary>
 	public class CommandClass
 	{
+		[CommandMethodAttribute("bargLFM", CommandFlags.Modal|CommandFlags.NoPaperSpace)]
 		[CommandMethodAttribute("LFM", CommandFlags.Modal|CommandFlags.NoPaperSpace)]
 		public void LayoutFromUserInput()
 		{

@@ -28,9 +28,7 @@ namespace LayoutsFromModel
 		{
 			List<DrawingBorders> borders = new List<DrawingBorders>();
 			
-			string blockname = Configuration.AppConfig.Instance.BlockName;
-			if (string.IsNullOrEmpty(blockname))
-				throw new System.Exception("Не задано имя блока рамки");
+			string blockname = GetBordersBlockName();
 			
 			using (Transaction tr = _wdb.TransactionManager.StartTransaction())
 			{
@@ -76,6 +74,14 @@ namespace LayoutsFromModel
 			}
 			
 			return borders.ToArray();
+		}
+		
+		private string GetBordersBlockName()
+		{
+			string blockname = Configuration.AppConfig.Instance.BlockName;
+			if (string.IsNullOrEmpty(blockname))
+				throw new System.Exception("Не задано имя блока рамки!");
+			return blockname;
 		}
 		
 		private List<ObjectId> GetBlockReferences(ObjectId blockId)
