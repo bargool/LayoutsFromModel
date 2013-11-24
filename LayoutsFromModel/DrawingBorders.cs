@@ -9,7 +9,8 @@ using Autodesk.AutoCAD.Geometry;
 namespace LayoutsFromModel
 {
 	/// <summary>
-	/// Класс, описывающий поведение границ выделенной области для отображения в пространстве листа
+	/// Класс, описывающий поведение границ выделенной
+	/// области для отображения в пространстве листа
 	/// </summary>
 	public sealed class DrawingBorders
 	{
@@ -52,7 +53,7 @@ namespace LayoutsFromModel
 		
 		string name;
 		/// <summary>
-		/// Имя области
+		/// Имя области, в дальнейшем имя листа
 		/// </summary>
 		public string Name {
 			get { return name; }

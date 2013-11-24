@@ -9,7 +9,7 @@ using Autodesk.AutoCAD.Geometry;
 namespace LayoutsFromModel
 {
 	/// <summary>
-	/// Description of BorderQueryResult.
+	/// Результат ввода пользователем рамки чертежа
 	/// </summary>
 	public struct BorderPromptResult
 	{
@@ -24,7 +24,6 @@ namespace LayoutsFromModel
 		}
 		
 		string stringResult;
-		
 		public string StringResult {
 			get { return stringResult; }
 			set { stringResult = value; }
@@ -38,16 +37,16 @@ namespace LayoutsFromModel
 		
 		public BorderPromptResult(Point3d firstPoint, Point3d secondPoint)
 		{
+			this.queryStatus = PromptResultStatus.OK;
 			this.firstPoint = firstPoint;
 			this.secondPoint = secondPoint;
-			this.queryStatus = PromptResultStatus.OK;
 			this.stringResult = "";
 		}
 		
 		public BorderPromptResult(string stringResult)
 		{
-			this.stringResult = stringResult;
 			this.queryStatus = PromptResultStatus.Keyword;
+			this.stringResult = stringResult;
 			this.firstPoint = Point3d.Origin;
 			this.secondPoint = Point3d.Origin;
 		}

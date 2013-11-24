@@ -8,7 +8,7 @@ using System;
 namespace LayoutsFromModel
 {
 	/// <summary>
-	/// Description of BorderQueryResultStatus.
+	/// Перечисление, отражающее статус запроса пользователя
 	/// </summary>
 	public enum PromptResultStatus
 	{

@@ -11,7 +11,7 @@ using Bargool.Acad.Library;
 namespace LayoutsFromModel
 {
 	/// <summary>
-	/// Description of LayoutCreator.
+	/// Класс для создания листов
 	/// </summary>
 	public class LayoutCreator
 	{
@@ -53,7 +53,7 @@ namespace LayoutsFromModel
 		}
 		
 		/// <summary>
-		/// Метод удаляет неинициализированные Layout
+		/// Метод удаляет неинициализированные листы
 		/// </summary>
 		public void DeleteNoninitializedLayouts()
 		{
@@ -81,6 +81,14 @@ namespace LayoutsFromModel
 			}
 		}
 		
+		/// <summary>
+		/// Проверка корректности желаемого имени листа
+		/// Если лист с желаемым именем уже существует, к данному имени добавится "(1)"
+		/// Если и это имя уже есть - цифра в скобках будет увеличиваться, пока не будет найден
+		/// уникальный вариант
+		/// </summary>
+		/// <param name="expectedName">Желаемое имя листа</param>
+		/// <returns>Корректное имя листа</returns>
 		string CheckLayoutName(string expectedName)
 		{
 			string layoutName = expectedName;
@@ -103,6 +111,13 @@ namespace LayoutsFromModel
 			return layoutName;
 		}
 		
+		/// <summary>
+		/// Метод добавляет из объекта границ чертежа новые
+		/// именованые настройки печати в файл, если таковых там нет
+		/// </summary>
+		/// <param name="borders">Объект границ чертежа</param>
+		/// <param name="tr">Текущая транзакция</param>
+		/// <returns>Настройки печати, соответствующие границам чертежа</returns>
 		PlotSettings ImportPlotSettings(DrawingBorders borders, Transaction tr)
 		{
 			PlotSettings ps = new PlotSettings(false);
@@ -153,30 +168,16 @@ namespace LayoutsFromModel
 				if (vp == null)
 					throw new System.Exception("Не удалось получить вьюпорт!");
 			}
-			// Высоту и ширину вьюпорта выставляем в размер печатаемой области
-			if (layout.PlotRotation == PlotRotation.Degrees000)
-			{
-				vp.Height = layout.PlotPaperSize.Y - layout.PlotPaperMargins.MaxPoint.Y
-					- layout.PlotPaperMargins.MinPoint.Y;
-				vp.Width = layout.PlotPaperSize.X - layout.PlotPaperMargins.MaxPoint.X
-					- layout.PlotPaperMargins.MinPoint.X;
-				vp.CenterPoint = new Point3d(vp.Width/2 + layout.PlotOrigin.X,
-				                             vp.Height/2 + layout.PlotOrigin.Y,
-				                             0);
-			}
-			else
-			{
-				vp.Height = layout.PlotPaperSize.X - layout.PlotPaperMargins.MaxPoint.X
-					- layout.PlotPaperMargins.MinPoint.X;
-				vp.Width = layout.PlotPaperSize.Y - layout.PlotPaperMargins.MaxPoint.Y
-					- layout.PlotPaperMargins.MinPoint.Y;
-				vp.CenterPoint = new Point3d(vp.Width/2 + layout.PlotOrigin.Y,
-				                             vp.Height/2 + layout.PlotOrigin.X,
-				                             0);
-			}
+			// Высоту и ширину вьюпорта выставляем в размер выделенной области
+			vp.Height = borders.Height / borders.ScaleFactor;
+			vp.Width = borders.Width / borders.ScaleFactor;
+			vp.CenterPoint = new Point3d(vp.Width/2 + layout.PlotOrigin.X,
+			                             vp.Height/2 + layout.PlotOrigin.Y,
+			                             0);
 			vp.ViewTarget = new Point3d(0,0,0);
-			vp.ViewHeight = vp.Height * borders.ScaleFactor;
+			vp.ViewHeight = borders.Height;
 			vp.ViewCenter = new Point2d(borders.Center.X, borders.Center.Y);
+			vp.Locked = LayoutsFromModel.Configuration.AppConfig.Instance.LockViewPorts;
 		}
 	}
 }

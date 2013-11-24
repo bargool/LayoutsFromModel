@@ -19,10 +19,17 @@ namespace LayoutsFromModel
 	/// </summary>
 	public class CommandClass
 	{
+		[CommandMethodAttribute("bargLFM", CommandFlags.Modal|CommandFlags.NoPaperSpace)]
 		[CommandMethodAttribute("LFM", CommandFlags.Modal|CommandFlags.NoPaperSpace)]
 		public void LayoutFromUserInput()
 		{
 			CreateLayouts(new UserInputBordersBuilder());
+		}
+		
+		[CommandMethod("bargLFBL", CommandFlags.Modal|CommandFlags.NoPaperSpace|CommandFlags.UsePickSet)]
+		public void LayoutFromBlocks()
+		{
+			CreateLayouts(new BlocksBordersBuilder());
 		}
 		
 		private void CreateLayouts(IBordersCollectionBuilder bordersBuilder)
@@ -34,6 +41,11 @@ namespace LayoutsFromModel
 			initial.FillPlotInfoManager();
 			bordersBuilder.InitialBorderIndex = initial.Index;
 			DrawingBorders[] borders = bordersBuilder.GetDrawingBorders();
+			if (borders.Length == 0)
+			{
+				acad.DocumentManager.MdiActiveDocument.Editor.WriteMessage("\nНе выбран ни один чертёж");
+				return;
+			}
 			LayoutCreator layoutCreator = new LayoutCreator();
 			foreach (DrawingBorders border in borders)
 			{

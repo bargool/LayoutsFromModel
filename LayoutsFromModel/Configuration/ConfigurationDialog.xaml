@@ -20,7 +20,7 @@
 		</Style>
 		<Style TargetType="TextBox">
 			<Setter Property="Height" Value="23" />
-			<Setter Property="Margin" Value="10,10" />
+			<Setter Property="Margin" Value="10,0,10,10" />
 		</Style>
 		<Style TargetType="Label">
 			<Setter Property="Margin" Value="10,0" />
@@ -56,6 +56,14 @@
 				Name="chkTileModeOn"
 				Content="Оставаться в модели по окончании работы"
 				Margin="10,0" />
+			<CheckBox
+				Name="chkLockVP"
+				Content="Блокировать созданные видовые экраны"
+				Margin="10, 0" />
+			<Label Content="Имя блока рамки для определения чертежей" />
+			<TextBox
+				Name="txtBlockName"
+				ToolTip="Имя блока рамки для определения чертежей"/>
 		</StackPanel>
 		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
 			<Button Name="btnOK" Content="OK" Click="BtnOK_Click"/>

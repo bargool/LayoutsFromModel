@@ -14,7 +14,7 @@ using System.Xml.Serialization;
 namespace LayoutsFromModel.Configuration
 {
 	/// <summary>
-	/// Метод для работы с конфигурацией
+	/// Класс, представляющий конфигурацию приложения
 	/// </summary>
 	[Serializable]
 	public sealed class AppConfig
@@ -47,27 +47,58 @@ namespace LayoutsFromModel.Configuration
 		}
 		
 		bool deleteNonInitializedLayouts = false;
+		/// <summary>
+		/// Удалять ли неинициализированные листы
+		/// </summary>
 		public bool DeleteNonInitializedLayouts {
 			get { return deleteNonInitializedLayouts; }
 			set { deleteNonInitializedLayouts = value; }
 		}
 		
 		double referenceDimension = 185.0;
+		/// <summary>
+		/// Эталонный размер. Используется для определения масштаба чертежа при
+		/// выборе пользователем. По-умолчанию - длина основной надписи
+		/// </summary>
 		public double ReferenceDimension {
 			get { return referenceDimension; }
 			set { referenceDimension = value; }
 		}
 		
 		bool tilemodeOn = true;
+		/// <summary>
+		/// Возвращаться ли в модель по окончанию созданию листов
+		/// </summary>
 		public bool TilemodeOn {
 			get { return tilemodeOn; }
 			set { tilemodeOn = value; }
 		}
 		
 		string templatePath = "";
+		/// <summary>
+		/// Путь к шаблону с именованными настройками печати
+		/// </summary>
 		public string TemplatePath {
 			get { return templatePath; }
 			set { templatePath = value; }
+		}
+		
+		string blockName = "";
+		/// <summary>
+		/// Имя блока рамки
+		/// </summary>
+		public string BlockName {
+			get { return blockName; }
+			set { blockName = value; }
+		}
+		
+		bool lockViewPorts = false;
+		/// <summary>
+		/// Блокирование видовых экранов
+		/// </summary>
+		public bool LockViewPorts {
+			get { return lockViewPorts; }
+			set { lockViewPorts = value; }
 		}
 		
 		const string FILENAME = "lfmsettings.xml"; // Имя файла конфигурации
@@ -82,34 +113,15 @@ namespace LayoutsFromModel.Configuration
 			}
 		}
 		
+		
 		private static AppConfig instance = Load();
 		
 		public static AppConfig Instance {
 			get { return instance; }
 		}
 		
-		/// <summary>
-		/// Default constructor. Makes default settings
-		/// </summary>
 		private AppConfig()
-//			:this("Lay", "", 10, false, 185.0, true, "")
 		{}
-		
-		private AppConfig(
-			string prefix,
-			string suffix,
-			int precision,
-			bool deleteNonInitializedLayouts,
-			double referenceDimension, bool tilemodeOn, string templatePath)
-		{
-			this.Prefix = prefix;
-			this.Suffix = suffix;
-			this.Precision = precision;
-			this.DeleteNonInitializedLayouts = deleteNonInitializedLayouts;
-			this.ReferenceDimension = referenceDimension;
-			this.TilemodeOn = tilemodeOn;
-			this.TemplatePath = templatePath;
-		}
 		
 		/// <summary>
 		/// Сохранение конфигурации в файл
@@ -155,7 +167,9 @@ namespace LayoutsFromModel.Configuration
 			ConfigurationDialog win = new ConfigurationDialog(Prefix, Suffix,
 			                                                  Precision,DeleteNonInitializedLayouts,
 			                                                  ReferenceDimension,
-			                                                  TilemodeOn);
+			                                                  TilemodeOn,
+			                                                  BlockName,
+			                                                  LockViewPorts);
 			win.ShowDialog();
 			if (true == win.DialogResult)
 			{
@@ -164,6 +178,8 @@ namespace LayoutsFromModel.Configuration
 				this.Precision = win.Precision??new AppConfig().Precision;
 				this.DeleteNonInitializedLayouts = win.DelNonInitializedLayouts;
 				this.TilemodeOn = win.TilemodeOn;
+				this.BlockName = win.BlockName;
+				this.LockViewPorts = win.LockViewPorts;
 				Save();
 			}
 		}
@@ -178,11 +194,6 @@ namespace LayoutsFromModel.Configuration
 			return string.Format(
 				"[Configuration Prefix={0}, Suffix={1}, Precision={2}, DeleteNonInitializedLayouts={3}, ReferenceDimension={4}, TilemodeOn={5}]",
 				Prefix, Suffix, Precision, DeleteNonInitializedLayouts, ReferenceDimension, TilemodeOn);
-		}
-		
-		public void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }
