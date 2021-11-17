@@ -45,6 +45,7 @@ namespace LayoutsFromModel
 				}
 				
 				layout.CopyFrom(ps);
+				layout.AnnoAllVisible = true;
 				lm.CurrentLayout = layout.LayoutName;
 				View.Zoom(new Point3d(0,0,0), new Point3d(layout.PlotPaperSize.X, layout.PlotPaperSize.Y, 0), new Point3d(), 1);
 				CreateViewport(layout, borders, tr);
